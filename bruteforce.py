@@ -30,10 +30,23 @@ def md5crypt(ascii_password,ascii_salt):
         intermediate_0.update(alternate_sum.digest() if i > 16 else alternate_sum.digest()[:i])
         i -= 16
     i = pwlen
-    print("HIIII")
-    print(i)
-    print(i >> 1)
+    #For each bit in length(password) from low to high and stop after the most significant set bit
+    while True:
+      #if bit is set append a NUL byte
+      if(i%2 == 1):
+        intermediate_0.update('\0'.encode("utf-8"))
+      #if bit is unset append the first byte of the password
+      if(i%2 == 0):
+        intermediate_0.update(ascii_password[0].encode("utf-8"))
+      #shift everything to the right
+      i = i//2
+      if(i == 0):
+        break
     print(intermediate_0.digest())
+    
+    for i in range(1000):
+    #compute the intermediate_i+1 b concatenating and hashing the following
+      
     a = binascii.b2a_uu(intermediate_0.digest())
     print(a)
     #compute intermediate sum
