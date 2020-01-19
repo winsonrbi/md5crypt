@@ -10,12 +10,14 @@ import binascii
 import hashlib
 import base64
 import itertools
+import multiprocessing
 
 result= hashlib.md5(b'0HPDynDxq')
 hexform=result.hexdigest()
 print(base64.b64encode(result.digest()))
 
-def md5crypt(ascii_password,ascii_salt):
+def md5crypt(ascii_password,ascii_salt= "4fTgjp6q"):
+    target_hash = "NqD7sOItIT/5JfzqmQ.ki0"
     b64_crypt = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     #compute alternate sum md5(password + salt + password)
     alternate = ascii_password + ascii_salt + ascii_password
@@ -44,9 +46,6 @@ def md5crypt(ascii_password,ascii_salt):
       i = i//2
       if(i == 0):
         break
-    print("Intermediate_0.digest() is")
-    print(intermediate_0.hexdigest())
-    
     old_digest = intermediate_0
     new_digest = hashlib.md5()
     for i in range(1000):
@@ -79,9 +78,17 @@ def md5crypt(ascii_password,ascii_salt):
     final_hash = ""
     for i in index_list:
         final_hash = final_hash + b64_crypt[int(i,2)]
-    print(final_hash)
+    if final_hash == target_hash:
+        print(ascii_password)
+        with open('answer.txt', 'w') as f:
+            print(ascii_password, file=f)
 
-for i in range(1,7):    
+num_workers = multiprocessing.cpu_count()
+pool = multiprocessing.Pool(num_workers)
+for i in range(1,7):
+    print(i)
     for subsets in itertools.product('QRSTUVWXYZABCDEFGHIJKLMNOPqrstuvwxyzabcdefghijklmnop',repeat=i):
-        print(''.join(subsets))
-md5crypt("zhgnnd","hfT7jp2q")
+        pool.apply_async(md5crypt, args=(''.join(subsets),))
+
+pool.close()
+pool.join()
