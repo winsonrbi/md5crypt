@@ -42,14 +42,36 @@ def md5crypt(ascii_password,ascii_salt):
       i = i//2
       if(i == 0):
         break
-    print(intermediate_0.digest())
+    print("Intermediate_0.digest() is")
+    print(intermediate_0.hexdigest())
     
+    old_digest = intermediate_0
+    new_digest = hashlib.md5()
     for i in range(1000):
     #compute the intermediate_i+1 b concatenating and hashing the following
-      
-    a = binascii.b2a_uu(intermediate_0.digest())
-    print(a)
+        if i % 2 == 0:
+            new_digest.update(old_digest.digest())
+        if i % 2 == 1:
+            new_digest.update(ascii_password.encode("utf-8"))
+        if i % 3 != 0:
+            new_digest.update(ascii_salt.encode('utf-8'))
+        if i % 7 != 0:
+            new_digest.update(ascii_password.encode('utf-8'))
+        if i % 2 == 0:
+            new_digest.update(ascii_password.encode('utf-8'))
+        if i % 2 == 1:
+            new_digest.update(old_digest.digest())
+        old_digest = new_digest
+        if(i == 999):
+            break
+        new_digest = hashlib.md5()
+    target_hexstring = old_digest.hexdigest()
+    #create a list
+    hex_list = [target_hexstring[i:i+2] for i in range(0,len(target_hexstring),2)]
+    print(hex_list)
+    #rearrange 16 bytes in this order: 11 4 10 5 3 9 15 2 8 14 1 7 13 0 6 12
+    
     #compute intermediate sum
     #Concatenate Password, Magic, Salt, Length in bytes of the alternate sum
 
-md5crypt("test","1234")
+md5crypt("zhgnnd","hfT7jp2q")
