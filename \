@@ -81,7 +81,6 @@ def md5crypt(ascii_password,ascii_salt):
         final_hash = final_hash + b64_crypt[int(i,2)]
     print(final_hash)
 
-for i in range(1,7):    
-    for subsets in itertools.product('QRSTUVWXYZABCDEFGHIJKLMNOPqrstuvwxyzabcdefghijklmnop',repeat=i):
-        print(''.join(subsets))
+bruteforce_strings = [''.join(i) for i in itertools.product('QRSTUVWXYZABCDEFGHIJKLMNOPqrstuvwxyzabcdefghijklmnop',repeat=6)]
+print(bruteforce_strings)
 md5crypt("zhgnnd","hfT7jp2q")
