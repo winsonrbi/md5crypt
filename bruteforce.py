@@ -15,6 +15,7 @@ hexform=result.hexdigest()
 print(base64.b64encode(result.digest()))
 
 def md5crypt(ascii_password,ascii_salt):
+    b64_crypt = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     #compute alternate sum md5(password + salt + password)
     alternate = ascii_password + ascii_salt + ascii_password
     alternate_sum = hashlib.md5()
@@ -70,8 +71,18 @@ def md5crypt(ascii_password,ascii_salt):
     hex_list = [target_hexstring[i:i+2] for i in range(0,len(target_hexstring),2)]
     print(hex_list)
     #rearrange 16 bytes in this order: 11 4 10 5 3 9 15 2 8 14 1 7 13 0 6 12
-    
-    #compute intermediate sum
-    #Concatenate Password, Magic, Salt, Length in bytes of the alternate sum
-
+    new_hex = hex_list[11] + hex_list[4] + hex_list[10] + hex_list[5] + hex_list[3] + hex_list[9] + hex_list[15] + hex_list[2] + hex_list[8] + hex_list[14] + hex_list[1] + hex_list[7] + hex_list[13] + hex_list[0] + hex_list[6] + hex_list[12]
+    print(new_hex)
+    binary_string=bin(int(new_hex,16))[2:].zfill(128)
+    #create 6bit strings to index into b_64 crypt
+    index_list = [binary_string[i:i+6] for i in range(-12,-129,-6)]
+    index_list.insert(0,binary_string[-6:])
+    print(binary_string[-6:])
+    print(binary_string[-12:-6])
+    print(binary_string)
+    print(index_list)
+    final_hash = ""
+    for i in index_list:
+        final_hash = final_hash + b64_crypt[int(i,2)]
+    print(final_hash)
 md5crypt("zhgnnd","hfT7jp2q")
