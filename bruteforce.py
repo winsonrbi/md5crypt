@@ -11,7 +11,7 @@ import hashlib
 import base64
 import itertools
 import multiprocessing
-
+from datetime import datetime
 def md5crypt(ascii_password,ascii_salt= "4fTgjp6q"):
     try:
         target_hash = "NqD7sOItIT/5JfzqmQ.ki0"
@@ -93,9 +93,11 @@ if __name__ == '__main__':
             #print(''.join(subsets))
             #run a max of 7 before attempting to join
             target_word = ''.join(subsets)
-            if(target_word[0] != old_first):
-                print("Now on ",target_word[0])
-                old_first = target_word[0]
+            if(target_word[0:3] != old_first):
+                now = datetime.now()
+                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                print("Now on ",target_word[0:3], dt_string)
+                old_first = target_word[0:3]
             while len(jobs) > 7:
                 for job in jobs:
                     if job.is_alive() == False:
