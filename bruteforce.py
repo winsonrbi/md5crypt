@@ -12,6 +12,7 @@ import base64
 import itertools
 import multiprocessing
 from datetime import datetime
+import sys
 def md5crypt(ascii_password,ascii_salt= "4fTgjp6q"):
     try:
         target_hash = "NqD7sOItIT/5JfzqmQ.ki0"
@@ -79,18 +80,18 @@ def md5crypt(ascii_password,ascii_salt= "4fTgjp6q"):
             print(ascii_password)
             with open('answer.txt', 'w') as f:
                 print(ascii_password, file=f)
+            return ascii_password
     except:
         print("Error with this result ",ascii_password) 
-
+        sys.exit()
     return
 
 if __name__ == '__main__':
-    old_first = ""
-    jobs = []
+    old_first= ''  
+    word_list=[]
     for i in range(5,7):
-        print(i)
         for subsets in itertools.product('QRSTUVWXYZABCDEFGHIJKLMNOPqrstuvwxyzabcdefghijklmnop',repeat=i):
-            #print(''.join(subsets))
+            print(''.join(subsets))
             #run a max of 7 before attempting to join
             target_word = ''.join(subsets)
             if(target_word[0:3] != old_first):
@@ -98,12 +99,12 @@ if __name__ == '__main__':
                 dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
                 print("Now on ",target_word[0:3], dt_string)
                 old_first = target_word[0:3]
-            while len(jobs) > 7:
-                for job in jobs:
-                    if job.is_alive() == False:
-                        jobs.remove(job)
-                pass
-            p = multiprocessing.Process(target=md5crypt,args=(target_word,))
-            jobs.append(p)
-            p.start()
-
+            word_list.append(target_word)
+            if(len(word_list) == 8000):
+                p = multiprocessing.Pool(multiprocessing.cpu_count())
+                #distribute word_list as workload
+                result = p.map(md5crypt,word_list)
+                p.close()
+                p.join()
+                word_list=[]
+            
