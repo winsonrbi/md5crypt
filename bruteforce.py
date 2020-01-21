@@ -80,7 +80,7 @@ def md5crypt(ascii_password,ascii_salt= "4fTgjp6q"):
             print(ascii_password)
             with open('answer.txt', 'w') as f:
                 print(ascii_password, file=f)
-            sys..exit()
+            sys.exit()
             return ascii_password
     except:
         print("Error with this result ",ascii_password) 
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     old_first= ''  
     word_list=[]
     for i in range(6,7):
-        for subsets in itertools.product('QRSTUVWXYZABCDEFGHIJKLMNOPqrstuvwxyzabcdefghijklmnop',repeat=i):
+        for subsets in itertools.product('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',repeat=i):
             #print(''.join(subsets))
             #run a max of 7 before attempting to join
             target_word = ''.join(subsets)
@@ -108,4 +108,4 @@ if __name__ == '__main__':
                 p.close()
                 p.join()
                 word_list=[]
-  print("DONE") 
+    print("DONE") 
