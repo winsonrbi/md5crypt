@@ -89,9 +89,9 @@ def md5crypt(ascii_password,ascii_salt= "4fTgjp6q"):
 if __name__ == '__main__':
     old_first= ''  
     word_list=[]
-    for i in range(5,7):
+    for i in range(6,7):
         for subsets in itertools.product('QRSTUVWXYZABCDEFGHIJKLMNOPqrstuvwxyzabcdefghijklmnop',repeat=i):
-            print(''.join(subsets))
+            #print(''.join(subsets))
             #run a max of 7 before attempting to join
             target_word = ''.join(subsets)
             if(target_word[0:3] != old_first):
