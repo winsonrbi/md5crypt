@@ -71,26 +71,31 @@ def md5crypt(ascii_password,ascii_salt= "4fTgjp6q"):
         new_hex = hex_list[11] + hex_list[4] + hex_list[10] + hex_list[5] + hex_list[3] + hex_list[9] + hex_list[15] + hex_list[2] + hex_list[8] + hex_list[14] + hex_list[1] + hex_list[7] + hex_list[13] + hex_list[0] + hex_list[6] + hex_list[12]
         binary_string=bin(int(new_hex,16))[2:].zfill(128)
         #create 6bit strings to index into b_64 crypt
-        index_list = [binary_string[i:i+6] for i in range(-12,-129,-6)]
-        index_list.insert(0,binary_string[-6:])
-        final_hash = ""
+        index_list=[]
+        while len(binary_string) >= 0:
+            index_list.append(binary_string[-6:])
+            binary_string = binary_string[:-6]
+            if(len(binary_string) <= 2):
+                index_list.append(binary_string)
+                break
+        final_hash=""
         for i in index_list:
             final_hash = final_hash + b64_crypt[int(i,2)]
         if final_hash == target_hash:
-            print(ascii_password)
+            print("Password Found, the password is: ",ascii_password)
             with open('answer.txt', 'w') as f:
                 print(ascii_password, file=f)
             sys.exit()
             return ascii_password
-    except:
-        print("Error with this result ",ascii_password) 
+    except Exception as e:
+        print("Error with this result ",ascii_password, "Error: ", e) 
         sys.exit()
     return
 
 if __name__ == '__main__':
     old_first= ''  
     word_list=[]
-    for i in range(6,7):
+    for i in range(1,5):
         for subsets in itertools.product('vwxyzabcdefghijklmnopqrstu',repeat=i):
             #print(''.join(subsets))
             #run a max of 7 before attempting to join
