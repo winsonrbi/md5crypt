@@ -91,7 +91,7 @@ if __name__ == '__main__':
     old_first= ''  
     word_list=[]
     for i in range(6,7):
-        for subsets in itertools.product('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',repeat=i):
+        for subsets in itertools.product('vwxyzabcdefghijklmnopqrstu',repeat=i):
             #print(''.join(subsets))
             #run a max of 7 before attempting to join
             target_word = ''.join(subsets)
